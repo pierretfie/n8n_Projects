@@ -29,8 +29,8 @@ It uses the [Stoic API](https://github.com/pierretfie/stoic-api.git) to fetch ra
 
 ## 🚀 Getting Started
 
-### 1. Setup docker
-
+### 1. Setup docker as instructed in the README in:
+https://github.com/pierretfie/n8n_Projects.git
 
 ### 2. Setup the Workflow
 

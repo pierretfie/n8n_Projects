@@ -1,5 +1,8 @@
 # 🥷 Stoic Ninja
 
+
+<img width="828" height="465" alt="image" src="https://github.com/user-attachments/assets/25b07103-9cb5-4cad-8f2c-551a40646ca2" />
+
 **Stoic Ninja** is an automated workflow built with [n8n](https://n8n.io/) that delivers a dose of daily Stoic wisdom directly to your Telegram via a scheduled task.
 
 It uses the [Stoic API](https://github.com/pierretfie/stoic-api.git) to fetch random Stoic quotes and pushes them to you every morning using a Telegram bot.

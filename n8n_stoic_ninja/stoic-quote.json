@@ -1,0 +1,234 @@
+{
+  "name": "stoic-quote",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        256
+      ],
+      "id": "dfce782c-f697-4310-b8b2-06f0e2634848",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -496,
+        -128
+      ],
+      "id": "75f15d2e-002b-4e12-8458-de238846024c",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        288
+      ],
+      "id": "f65ba183-c836-420d-a516-91b16690d16a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "FbOIu2WexnZ2VBkS",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={\n  \"sessionId\": \"test-session-click\",\n  \"message\": \"Good morning\"\n}\n",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        288
+      ],
+      "id": "3dd540e9-2e13-42e0-893d-956c0ff668ff",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "6UbPYcAU2D58NrFF",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "getting stoic quotes",
+        "url": "https://stoic-api.onrender.com/quote",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -16,
+        288
+      ],
+      "id": "7ea8e22a-beaa-47cd-b9e1-e49ebd60b239",
+      "name": "get_stoic_quote"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        64
+      ],
+      "id": "fa839316-d54b-44df-aceb-240e4d08e33b",
+      "name": "When chat message received",
+      "webhookId": "4d285167-c80a-488c-976e-751b386cbeac"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are a wise Stoic guide every morning. For each Stoic quote provided:\nstart with a warm good morning greeting(use emoji if possible)\n1.State the quote\n2.Explain its meaning clearly and concisely, rooted in Stoic philosophy and state the source of the quote if 100% sure of the source e.g the book title.\n3.Offer concise wise practical  daily advice on how to apply the quote in modern life — with calm, rationality, and virtue that specifically focuses on today.e.g Today, when frustrations or surprises arise, pause and ask: Is this within my control? If not, release it. Focus only on your thoughts, actions, and attitude — that's where your strength lives.\nsend the message to telegram account\n",
+        "options": {
+          "systemMessage": "You are a wise Stoic guide every morning. For each Stoic quote provided:\nstart with a warm good morning greeting(use emoji if possible)\n1.State the quote\n2.Explain its meaning clearly and concisely, rooted in Stoic philosophy and state the source of the quote if 100% sure of the source e.g the book title.\n3.Offer concise wise practical  daily advice on how to apply the quote in modern life — with calm, rationality, and virtue that specifically focuses on today.e.g Today, when frustrations or surprises arise, pause and ask: Is this within my control? If not, release it. Focus only on your thoughts, actions, and attitude — that's where your strength lives.\nsend the message to telegram account\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        64
+      ],
+      "id": "58500569-fb15-43c9-a561-558a71f089a5",
+      "name": "stoic ninja"
+    },
+    {
+      "parameters": {
+        "chatId": "7211734686",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTool",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        336
+      ],
+      "id": "eb8545cd-bc31-4249-98bb-a8bf1ccac252",
+      "name": "Send a text message in Telegram",
+      "webhookId": "0edc7e2b-7bfc-4ff5-9d28-91d49a7ada36",
+      "credentials": {
+        "telegramApi": {
+          "id": "BWsu7ZlQiCI7zrJ3",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_stoic_quote": {
+      "ai_tool": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message in Telegram": {
+      "ai_tool": [
+        [
+          {
+            "node": "stoic ninja",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "13e38c20-5aa2-4496-b7c2-7ea8b67b1906",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2e9844edd8f494f81d161d9b589ce1caa3e82257f1ace5d29241dd3823555c76"
+  },
+  "id": "6iEufdQ5SCbLFVF1",
+  "tags": []
+}
